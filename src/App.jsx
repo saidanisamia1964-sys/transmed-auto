@@ -369,7 +369,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
               { n: '01', icon: Car, t: 'Choisissez', d: 'Sélectionnez votre véhicule dans notre catalogue ou demandez un modèle spécifique.' },
               { n: '02', icon: FileCheck, t: 'Documents', d: 'Nous préparons tous les papiers : carte grise, certificat de cession, quitus fiscal.' },
               { n: '03', icon: Ship, t: 'Transit', d: 'Embarquement à Marseille, transit maritime sécurisé jusqu\'à l\'Algérie.' },
-              { n: '04', icon: Check, t: 'Livraison', d: 'Livraison au port.' },
+              { n: '04', icon: Check, t: 'Livraison', d: 'Livraison du véhicule.' },
             ].map(s => (
               <div key={s.n} className="bg-white p-6 rounded shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
