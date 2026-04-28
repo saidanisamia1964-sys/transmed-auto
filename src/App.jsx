@@ -392,7 +392,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
         <div className="max-w-7xl mx-auto px-4 lg:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl md:text-3xl font-black mb-2">Une question ? Un projet d'export ?</h2>
-            <p className="text-gray-300">Notre équipe vous répond du lundi au samedi. Français et arabe.</p>
+            <p className="text-gray-300">Notre équipe vous répond du lundi au samedi.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <a href={`tel:${siteInfo.phone_raw}`} className="bg-red text-white px-6 py-3 rounded font-bold uppercase text-sm tracking-wider bg-red-hover flex items-center gap-2 whitespace-nowrap">
