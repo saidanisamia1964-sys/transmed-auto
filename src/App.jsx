@@ -166,7 +166,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <div className="bg-red text-white px-3 py-2 font-black text-xl">TM</div>
+            <div className="bg-red text-white px-3 py-2 font-black text-xl">SM</div>
             <div className="font-bold text-lg">{siteInfo.name}</div>
           </div>
           <p className="text-sm text-gray-400 leading-relaxed">
