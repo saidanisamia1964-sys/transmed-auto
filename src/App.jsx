@@ -696,7 +696,7 @@ const AboutPage = ({ data, navigate }) => {
               <div className="text-sm text-grey font-semibold uppercase tracking-wider">Années d'expérience</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-black text-red mb-1">4 800+</div>
+              <div className="text-5xl font-black text-red mb-1">100+</div>
               <div className="text-sm text-grey font-semibold uppercase tracking-wider">Véhicules livrés</div>
             </div>
             <div className="text-center">
