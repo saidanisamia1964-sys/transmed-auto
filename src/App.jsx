@@ -640,41 +640,6 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
    PAGE — TESTIMONIALS / ABOUT / CONTACT
 =============================================================== */
 
-const TestimonialsPage = ({ data, navigate }) => (
-  <main className="bg-grey-light min-h-screen">
-    <section className="bg-dark text-white py-10">
-      <div className="max-w-7xl mx-auto px-4 lg:px-6">
-        <button onClick={() => navigate('home')} className="text-gray-400 hover:text-red text-sm mb-3 flex items-center gap-1">
-          <ChevronLeft size={14}/>Accueil
-        </button>
-        <h1 className="text-3xl md:text-4xl font-black">Témoignages clients</h1>
-      </div>
-    </section>
-
-    <section className="max-w-5xl mx-auto px-4 lg:px-6 py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[
-          { name: 'Karim B.', city: 'Alger', text: "Service impeccable de A à Z. J'ai reçu mon véhicule à Alger en 19 jours. Toutes les démarches gérées. Je recommande." },
-          { name: 'Sofiane M.', city: 'Oran', text: "Très bon contact dès le premier appel. Prix transparent, pas de mauvaises surprises. La voiture était comme promis." },
-          { name: 'Yacine A.', city: 'Constantine', text: "Deuxième véhicule chez eux. Toujours sérieux et professionnels. Ils parlent français et arabe." },
-          { name: 'Mohamed T.', city: 'Annaba', text: "Excellent suivi du dossier. L'équipe à Drancy m'a accompagné à chaque étape. Très satisfait." },
-        ].map((t, i) => (
-          <div key={i} className="bg-white rounded shadow-sm p-6">
-            <div className="flex gap-1 mb-3">
-              {Array.from({length: 5}).map((_, i) => <Star key={i} size={18} className="text-red" fill="#DC2626"/>)}
-            </div>
-            <p className="text-grey leading-relaxed mb-4">"{t.text}"</p>
-            <div className="pt-4 border-t" style={{borderColor: '#E5E7EB'}}>
-              <div className="font-bold text-dark">{t.name}</div>
-              <div className="text-sm text-grey">{t.city}, Algérie</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  </main>
-);
-
 const AboutPage = ({ data, navigate }) => {
   const siteInfo = data.siteInfo;
   return (
