@@ -291,7 +291,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
               Spécialiste de l'<span className="text-red font-bold">export de véhicules</span> vers l'Algérie
             </h2>
             <p className="text-lg text-gray-300 mb-8 max-w-2xl">
-              Véhicules neufs et d'occasion. Démarches douanières, transit maritime et livraison à Alger gérés intégralement.
+              Véhicules neufs et d'occasion. Démarches douanières, transit maritime et livraison partout en Algérie gérés intégralement.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -371,7 +371,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
               { n: '01', icon: Car, t: 'Choisissez', d: 'Sélectionnez votre véhicule dans notre catalogue ou demandez un modèle spécifique.' },
               { n: '02', icon: FileCheck, t: 'Documents', d: 'Nous préparons tous les papiers : carte grise, certificat de cession, quitus fiscal.' },
               { n: '03', icon: Ship, t: 'Transit', d: 'Embarquement à Marseille, transit maritime sécurisé jusqu\'à l\'Algérie.' },
-              { n: '04', icon: Check, t: 'Livraison', d: 'Dédouanement et remise des clés à Alger.' },
+              { n: '04', icon: Check, t: 'Livraison', d: 'Dédouanement et remise des clés.' },
             ].map(s => (
               <div key={s.n} className="bg-white p-6 rounded shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
