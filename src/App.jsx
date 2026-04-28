@@ -90,7 +90,6 @@ const Header = ({ page, navigate, siteInfo }) => {
     { id: 'home', label: 'Accueil' },
     { id: 'catalog-neuf', label: 'Véhicules Neufs' },
     { id: 'catalog-occasion', label: 'Occasions' },
-    { id: 'testimonials', label: 'Témoignages' },
     { id: 'about', label: 'Qui sommes-nous' },
     { id: 'contact', label: 'Contact' },
   ];
@@ -186,7 +185,6 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
             <li><button onClick={() => navigate('home')} className="hover:text-red">Accueil</button></li>
             <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules Neufs</button></li>
             <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Occasions</button></li>
-            <li><button onClick={() => navigate('testimonials')} className="hover:text-red">Témoignages</button></li>
             <li><button onClick={() => navigate('about')} className="hover:text-red">Qui sommes-nous</button></li>
             <li><button onClick={() => navigate('contact')} className="hover:text-red">Contact</button></li>
           </ul>
