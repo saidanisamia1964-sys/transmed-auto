@@ -156,14 +156,15 @@ const Logo = ({ size = 'normal', white = false }) => {
    HEADER & FOOTER
 =============================================================== */
 
-const links = [
-  { id: 'home', label: 'Accueil' },
-  { id: 'catalog-all', label: 'Tous les véhicules' },
-  { id: 'catalog-neuf', label: 'Véhicules Neufs' },
-  { id: 'catalog-occasion', label: 'Véhicules d\'occasion' },
-  { id: 'about', label: 'Qui sommes-nous' },
-  { id: 'contact', label: 'Contact' },
-];
+const Header = ({ page, navigate, siteInfo }) => {
+  const [open, setOpen] = useState(false);
+  const links = [
+    { id: 'home', label: 'Accueil' },
+    { id: 'catalog-neuf', label: 'Véhicules Neufs' },
+    { id: 'catalog-occasion', label: 'Occasions' },
+    { id: 'about', label: 'Qui sommes-nous' },
+    { id: 'contact', label: 'Contact' },
+  ];
 
   return (
     <>
@@ -252,7 +253,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
           <ul className="space-y-2 text-sm text-gray-400">
             <li><button onClick={() => navigate('home')} className="hover:text-red">Accueil</button></li>
             <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules Neufs</button></li>
-            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">occasions</button></li>
+            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Occasions</button></li>
             <li><button onClick={() => navigate('about')} className="hover:text-red">Qui sommes-nous</button></li>
             <li><button onClick={() => navigate('contact')} className="hover:text-red">Contact</button></li>
           </ul>
@@ -401,7 +402,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
         Véhicules Neufs
       </button>
       <button onClick={() => navigate('catalog-occasion')} className="text-white hover:text-red border-b-4 border-transparent hover:border-red pb-2 transition-all">
-        Véhicules occasion
+        Véhicules Occasions
       </button>
     </div>
 
@@ -541,7 +542,7 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
     setSearch(''); setBrandFilter(''); setFuelFilter(''); setTransFilter(''); setMaxPrice(''); setSort('default');
   };
 
-  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "occasions" : 'Tous les Véhicules';
+  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "Véhicules d'Occasion" : 'Tous les Véhicules';
 
   // Trier marques avec compteurs
   const sortedBrands = useMemo(() => {
