@@ -821,7 +821,7 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
         {similar.length > 0 && (
           <div className="mt-8">
             <h2 className="text-xl font-black text-dark mb-4">Véhicules similaires</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {similar.map(v => <VehicleCard key={v.id} v={v} onClick={() => openVehicle(v)} />)}
             </div>
           </div>
