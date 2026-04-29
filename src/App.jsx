@@ -372,10 +372,10 @@ const HomePage = ({ data, navigate, openVehicle }) => {
   const recent = data.vehicles.slice(0, 8);
   const siteInfo = data.siteInfo;
 
-  const submitSearch = () => {
-    // Si modèle ou marque sélectionné on va sur catalogue, sinon catalog-neuf par défaut
-    navigate('catalog-neuf');
-  };
+ const submitSearch = () => {
+  // Aller sur le catalogue COMPLET (neufs + occasions)
+  navigate('catalog-all');
+};
 
   return (
     <main>
