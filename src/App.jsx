@@ -760,7 +760,6 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
               <div className="bg-grey-light p-4 rounded mb-6">
                 <div className="text-xs text-grey font-semibold uppercase mb-1">Prix export Algérie</div>
                 <div className="text-4xl font-black text-red">{fmtEUR(vehicle.price_eur)}</div>
-                <div className="text-xs text-grey mt-1">Frais de douane et transport inclus</div>
               </div>
 
               <div className="space-y-2 mb-6">
