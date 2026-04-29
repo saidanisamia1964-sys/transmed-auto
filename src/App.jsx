@@ -252,7 +252,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
           <ul className="space-y-2 text-sm text-gray-400">
             <li><button onClick={() => navigate('home')} className="hover:text-red">Accueil</button></li>
             <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules Neufs</button></li>
-            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Véhicules d'occasion</button></li>
+            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">occasions</button></li>
             <li><button onClick={() => navigate('about')} className="hover:text-red">Qui sommes-nous</button></li>
             <li><button onClick={() => navigate('contact')} className="hover:text-red">Contact</button></li>
           </ul>
@@ -401,7 +401,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
         Véhicules Neufs
       </button>
       <button onClick={() => navigate('catalog-occasion')} className="text-white hover:text-red border-b-4 border-transparent hover:border-red pb-2 transition-all">
-        Véhicules d'occasion
+        Véhicules occasion
       </button>
     </div>
 
@@ -541,7 +541,7 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
     setSearch(''); setBrandFilter(''); setFuelFilter(''); setTransFilter(''); setMaxPrice(''); setSort('default');
   };
 
-  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "Véhicules d'occasion" : 'Tous les Véhicules';
+  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "occasions" : 'Tous les Véhicules';
 
   // Trier marques avec compteurs
   const sortedBrands = useMemo(() => {
@@ -678,7 +678,7 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
         <nav className="text-sm text-grey mb-4 flex items-center gap-2 flex-wrap">
           <button onClick={() => navigate('home')} className="hover:text-red">Accueil</button>
           <ChevronRight size={12}/>
-          <button onClick={() => navigate(vehicle.type === 'neuf' ? 'catalog-neuf' : 'catalog-occasion')} className="hover:text-red">{vehicle.type === 'neuf' ? 'Neufs' : 'Véhicules d'occasion'}</button>
+          <button onClick={() => navigate(vehicle.type === 'neuf' ? 'catalog-neuf' : 'catalog-occasion')} className="hover:text-red">{vehicle.type === 'neuf' ? 'Neufs' : 'Occasions'}</button>
           <ChevronRight size={12}/>
           <span className="text-dark font-medium">{vehicle.brand} {vehicle.model}</span>
         </nav>
