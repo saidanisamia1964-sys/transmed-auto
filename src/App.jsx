@@ -189,7 +189,6 @@ const Header = ({ page, navigate, siteInfo }) => {
               <img src={LOGO_URL} alt="S2M Autos" className="h-12 md:h-14 w-auto object-contain"
                 onError={(e) => { e.target.style.display = 'none'; }}/>
               <div className="text-left hidden sm:block">
-                <div className="text-xs text-grey uppercase tracking-wider">Export Algérie</div>
               </div>
             </button>
 
@@ -377,14 +376,14 @@ const HomePage = ({ data, navigate, openVehicle }) => {
         <div className="relative max-w-7xl mx-auto px-4 lg:px-6 py-16 lg:py-24">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-red text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-6">
-              <Star size={12} fill="white"/>+25 ans d'expertise
+              <Star size={12} fill="white"/>+5 ans d'expertise
             </div>
             <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4">{siteInfo.name}</h1>
             <h2 className="text-xl md:text-2xl font-medium mb-6 text-gray-200">
               Spécialiste de l'<span className="text-red font-bold">export de véhicules</span> vers l'Algérie
             </h2>
             <p className="text-lg text-gray-300 mb-8 max-w-2xl">
-              Véhicules neufs et d'occasion. Démarches douanières, transit maritime et livraison Alger / Oran / Annaba gérés intégralement.
+              Vente de toutes marques de véhicules neufs et d’occasion.
             </p>
             <div className="flex flex-wrap gap-3">
               <button onClick={() => navigate('catalog-neuf')} className="bg-red text-white px-6 py-3 rounded font-bold uppercase text-sm tracking-wider bg-red-hover flex items-center gap-2">
@@ -470,7 +469,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
               { n: '01', icon: Car, t: 'Choisissez', d: 'Sélectionnez votre véhicule dans notre catalogue ou demandez un modèle spécifique.' },
               { n: '02', icon: FileCheck, t: 'Documents', d: 'Nous préparons tous les papiers : carte grise, certificat de cession, quitus fiscal.' },
               { n: '03', icon: Ship, t: 'Transit', d: 'Embarquement à Marseille, transit maritime sécurisé jusqu\'à l\'Algérie.' },
-              { n: '04', icon: Check, t: 'Livraison', d: 'Dédouanement et remise des clés à Alger, Oran ou Annaba.' },
+              { n: '04', icon: Check, t: 'Livraison', d: 'Livraison du véhicule' },
             ].map(s => (
               <div key={s.n} className="bg-white p-6 rounded shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
@@ -489,7 +488,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
         <div className="max-w-7xl mx-auto px-4 lg:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl md:text-3xl font-black mb-2">Une question ? Un projet d'export ?</h2>
-            <p className="text-gray-300">Notre équipe vous répond du lundi au samedi. Français et arabe.</p>
+            <p className="text-gray-300">Notre équipe vous répond du lundi au samedi.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <a href={`tel:${siteInfo.phone_raw}`} className="bg-red text-white px-6 py-3 rounded font-bold uppercase text-sm tracking-wider bg-red-hover flex items-center gap-2 whitespace-nowrap">
