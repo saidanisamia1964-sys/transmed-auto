@@ -161,7 +161,7 @@ const Header = ({ page, navigate, siteInfo }) => {
   const links = [
   { id: 'home', label: 'Accueil' },
   { id: 'catalog-all', label: 'Tous les véhicules' },
-  { id: 'catalog-neuf', label: 'Véhicules Neufs' },
+  { id: 'catalog-neuf', label: 'Véhicules neufs' },
   { id: 'catalog-occasion', label: 'Véhicules d\'occasion' },
   { id: 'about', label: 'Qui sommes-nous' },
   { id: 'contact', label: 'Contact' },
@@ -253,7 +253,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
           <h4 className="font-bold mb-4">Navigation</h4>
           <ul className="space-y-2 text-sm text-gray-400">
             <li><button onClick={() => navigate('home')} className="hover:text-red">Accueil</button></li>
-            <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules Neufs</button></li>
+            <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules neufs</button></li>
             <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Véhicules d'occasion</button></li>
             <li><button onClick={() => navigate('about')} className="hover:text-red">Qui sommes-nous</button></li>
             <li><button onClick={() => navigate('contact')} className="hover:text-red">Contact</button></li>
@@ -400,10 +400,10 @@ const HomePage = ({ data, navigate, openVehicle }) => {
     {/* DEUX LIENS NEUFS / OCCASIONS */}
     <div className="flex justify-center gap-6 md:gap-12 mb-6 text-base md:text-xl font-bold uppercase tracking-wider">
       <button onClick={() => navigate('catalog-neuf')} className="text-red hover:text-white border-b-4 border-red pb-2 transition-colors">
-        Véhicules Neufs
+        Véhicules neufs
       </button>
       <button onClick={() => navigate('catalog-occasion')} className="text-white hover:text-red border-b-4 border-transparent hover:border-red pb-2 transition-all">
-        Véhicules Occasions
+        Véhicules d'occasion
       </button>
     </div>
 
@@ -543,7 +543,7 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
     setSearch(''); setBrandFilter(''); setFuelFilter(''); setTransFilter(''); setMaxPrice(''); setSort('default');
   };
 
-  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "Véhicules d'Occasion" : 'Tous les Véhicules';
+  const title = filterType === 'neuf' ? 'Véhicules neufs' : filterType === 'occasion' ? "Véhicules d'Occasion" : 'Tous les Véhicules';
 
   // Trier marques avec compteurs
   const sortedBrands = useMemo(() => {
