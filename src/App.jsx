@@ -380,76 +380,59 @@ const HomePage = ({ data, navigate, openVehicle }) => {
   return (
     <main>
       <section className="relative bg-dark text-white overflow-hidden">
-        <div className="absolute inset-0">
-          <SafeImg src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80" alt="" className="w-full h-full opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/90 to-dark/40"/>
-        </div>
+  <div className="absolute inset-0">
+    <SafeImg src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80" alt="" className="w-full h-full opacity-25" />
+    <div className="absolute inset-0 bg-gradient-to-b from-dark/80 via-dark/70 to-dark"/>
+  </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 lg:px-6 py-16 lg:py-24">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-red text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider mb-6">
-              <Star size={12} fill="white"/>+5 ans d'expertise
-            </div>
-            <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4">{siteInfo.name}</h1>
-            <h2 className="text-xl md:text-2xl font-medium mb-6 text-gray-200">
-              Spécialiste de l'<span className="text-red font-bold">export de véhicules</span> vers l'Algérie
-            </h2>
-            <p className="text-lg text-gray-300 mb-8 max-w-2xl">
-              Vente de toutes marques de véhicules neufs et d’occasion.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button onClick={() => navigate('catalog-neuf')} className="bg-red text-white px-6 py-3 rounded font-bold uppercase text-sm tracking-wider bg-red-hover flex items-center gap-2">
-                Véhicules Neufs <ArrowRight size={16}/>
-              </button>
-              <button onClick={() => navigate('catalog-occasion')} className="bg-white text-dark px-6 py-3 rounded font-bold uppercase text-sm tracking-wider hover:bg-gray-200 flex items-center gap-2">
-                Voir les Occasions <ArrowRight size={16}/>
-              </button>
-            </div>
-          </div>
-        </div>
+  <div className="relative max-w-5xl mx-auto px-4 lg:px-6 py-16 lg:py-20 text-center">
+    {/* TITRE PRINCIPAL */}
+    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-4 text-red">
+      {siteInfo.name}
+    </h1>
 
-        <div className="relative max-w-7xl mx-auto px-4 lg:px-6 -mb-8 pb-8">
-          <div className="bg-white rounded shadow-2xl p-5 lg:p-6">
-            <div className="flex items-center gap-2 text-dark mb-4">
-              <Search size={18} className="text-red"/>
-              <span className="font-bold uppercase tracking-wider text-sm">Rechercher un véhicule</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div>
-                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Marque</label>
-                <select value={searchBrand} onChange={e => { setSearchBrand(e.target.value); setSearchModel(''); }} className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}>
-                  <option value="">Toutes les marques</option>
-                  {sortedBrands.map(b => {
-                    const count = brandCounts[b];
-                    return (
-                      <option key={b} value={b} disabled={!count} style={!count ? {color: '#9CA3AF'} : {}}>
-                        {b} {count ? `(${count})` : ''}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Modèle</label>
-                <select value={searchModel} onChange={e => setSearchModel(e.target.value)} disabled={!searchBrand}
-                  className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none disabled:bg-grey-light disabled:cursor-not-allowed" style={{borderColor: '#E5E7EB'}}>
-                  <option value="">{searchBrand ? 'Tous les modèles' : 'Choisir une marque'}</option>
-                  {availableModels.map(m => <option key={m}>{m}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Prix max (€)</label>
-                <input type="number" placeholder="20 000" value={searchPrice} onChange={e => setSearchPrice(e.target.value)} className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}/>
-              </div>
-              <div className="flex items-end">
-                <button onClick={submitSearch} className="w-full bg-red text-white py-2.5 rounded font-bold uppercase tracking-wider bg-red-hover flex items-center justify-center gap-2">
-                  <Search size={16}/>Rechercher
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    {/* SOUS-TITRE */}
+    <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-8 text-white uppercase tracking-wide">
+      Spécialiste de l'export de véhicules vers l'Algérie
+    </h2>
+
+    {/* DEUX LIENS NEUFS / OCCASIONS */}
+    <div className="flex justify-center gap-6 md:gap-12 mb-6 text-base md:text-xl font-bold uppercase tracking-wider">
+      <button onClick={() => navigate('catalog-neuf')} className="text-red hover:text-white border-b-4 border-red pb-2 transition-colors">
+        Véhicules Neufs
+      </button>
+      <button onClick={() => navigate('catalog-occasion')} className="text-white hover:text-red border-b-4 border-transparent hover:border-red pb-2 transition-all">
+        Véhicules Occasions
+      </button>
+    </div>
+
+    {/* BARRE DE RECHERCHE COMPACTE */}
+    <div className="bg-white rounded-full shadow-2xl p-2 max-w-3xl mx-auto flex flex-col md:flex-row items-stretch gap-2">
+      <select value={searchBrand} onChange={e => { setSearchBrand(e.target.value); setSearchModel(''); }} 
+        className="flex-1 px-4 py-3 text-dark rounded-full md:rounded-full focus:outline-none cursor-pointer text-sm font-medium">
+        <option value="">Marques</option>
+        {sortedBrands.map(b => {
+          const count = brandCounts[b];
+          return (
+            <option key={b} value={b} disabled={!count} style={!count ? {color: '#9CA3AF'} : {}}>
+              {b} {count ? `(${count})` : ''}
+            </option>
+          );
+        })}
+      </select>
+      <select value={searchModel} onChange={e => setSearchModel(e.target.value)} disabled={!searchBrand}
+        className="flex-1 px-4 py-3 text-dark rounded-full focus:outline-none cursor-pointer text-sm font-medium disabled:bg-grey-light disabled:cursor-not-allowed">
+        <option value="">{searchBrand ? 'Modèle' : 'Modèle'}</option>
+        {availableModels.map(m => <option key={m}>{m}</option>)}
+      </select>
+      <input type="number" placeholder="Prix Max" value={searchPrice} onChange={e => setSearchPrice(e.target.value)} 
+        className="flex-1 px-4 py-3 text-dark rounded-full focus:outline-none text-sm font-medium"/>
+      <button onClick={submitSearch} className="bg-red hover:bg-red-hover text-white w-full md:w-14 h-12 rounded-full flex items-center justify-center shrink-0">
+        <Search size={20}/>
+      </button>
+    </div>
+  </div>
+</section>
 
       {recent.length > 0 && (
         <section className="bg-white py-16 mt-12">
