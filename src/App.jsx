@@ -159,12 +159,13 @@ const Logo = ({ size = 'normal', white = false }) => {
 const Header = ({ page, navigate, siteInfo }) => {
   const [open, setOpen] = useState(false);
   const links = [
-    { id: 'home', label: 'Accueil' },
-    { id: 'catalog-neuf', label: 'Véhicules Neufs' },
-    { id: 'catalog-occasion', label: 'Occasions' },
-    { id: 'about', label: 'Qui sommes-nous' },
-    { id: 'contact', label: 'Contact' },
-  ];
+  { id: 'home', label: 'Accueil' },
+  { id: 'catalog-all', label: 'Tous les véhicules' },
+  { id: 'catalog-neuf', label: 'Véhicules Neufs' },
+  { id: 'catalog-occasion', label: 'Véhicules d\'occasion' },
+  { id: 'about', label: 'Qui sommes-nous' },
+  { id: 'contact', label: 'Contact' },
+];
 
   return (
     <>
@@ -253,7 +254,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
           <ul className="space-y-2 text-sm text-gray-400">
             <li><button onClick={() => navigate('home')} className="hover:text-red">Accueil</button></li>
             <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules Neufs</button></li>
-            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Occasions</button></li>
+            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Véhicules d'occasion</button></li>
             <li><button onClick={() => navigate('about')} className="hover:text-red">Qui sommes-nous</button></li>
             <li><button onClick={() => navigate('contact')} className="hover:text-red">Contact</button></li>
           </ul>
