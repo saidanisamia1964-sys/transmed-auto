@@ -679,7 +679,7 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
         <nav className="text-sm text-grey mb-4 flex items-center gap-2 flex-wrap">
           <button onClick={() => navigate('home')} className="hover:text-red">Accueil</button>
           <ChevronRight size={12}/>
-          <button onClick={() => navigate(vehicle.type === 'neuf' ? 'catalog-neuf' : 'catalog-occasion')} className="hover:text-red">{vehicle.type === 'neuf' ? 'Neufs' : 'Occasions'}</button>
+          <button onClick={() => navigate(vehicle.type === 'neuf' ? 'catalog-neuf' : 'catalog-occasion')} className="hover:text-red">{vehicle.type === 'neuf' ? 'Neufs' : 'Véhicules d'occasion'}</button>
           <ChevronRight size={12}/>
           <span className="text-dark font-medium">{vehicle.brand} {vehicle.model}</span>
         </nav>
