@@ -253,7 +253,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
           <ul className="space-y-2 text-sm text-gray-400">
             <li><button onClick={() => navigate('home')} className="hover:text-red">Accueil</button></li>
             <li><button onClick={() => navigate('catalog-neuf')} className="hover:text-red">Véhicules Neufs</button></li>
-            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Occasions</button></li>
+            <li><button onClick={() => navigate('catalog-occasion')} className="hover:text-red">Véhicules d'occasion</button></li>
             <li><button onClick={() => navigate('about')} className="hover:text-red">Qui sommes-nous</button></li>
             <li><button onClick={() => navigate('contact')} className="hover:text-red">Contact</button></li>
           </ul>
@@ -402,7 +402,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
         Véhicules Neufs
       </button>
       <button onClick={() => navigate('catalog-occasion')} className="text-white hover:text-red border-b-4 border-transparent hover:border-red pb-2 transition-all">
-        Véhicules Occasions
+        Véhicules d'occasion
       </button>
     </div>
 
