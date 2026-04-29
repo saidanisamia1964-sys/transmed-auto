@@ -4,7 +4,8 @@ import {
   Clock, Search, Menu, Check, Car, Cog, MessageCircle, Facebook,
   Instagram, Lock, Ship, FileCheck, ArrowRight, Star, Loader2,
   LayoutDashboard, UserCog, Save, Plus, Edit2, Trash2, LogOut,
-  Settings as SettingsIcon, Upload, ImagePlus, GripVertical
+  Settings as SettingsIcon, Upload, ImagePlus, Palette, DoorOpen,
+  Users, Sparkles, Gauge, Package
 } from 'lucide-react';
 import { supabase } from './supabase.js';
 
@@ -12,14 +13,44 @@ import { supabase } from './supabase.js';
    CONSTANTES
 =============================================================== */
 
+const LOGO_URL = 'https://ckmpdtfaifghmsdntrhp.supabase.co/storage/v1/object/public/site-assets/Image1.jpg';
+
+// Liste fixe des marques (~40 marques principales du marché Algérie/France)
+const ALL_BRANDS = [
+  // Françaises
+  'Alpine', 'Citroën', 'DS', 'Dacia', 'Peugeot', 'Renault',
+  // Allemandes
+  'Audi', 'BMW', 'Mercedes-Benz', 'Mini', 'Opel', 'Porsche', 'Smart', 'Volkswagen',
+  // Italiennes
+  'Alfa Romeo', 'Fiat', 'Ferrari', 'Lancia', 'Maserati',
+  // Japonaises
+  'Honda', 'Lexus', 'Mazda', 'Mitsubishi', 'Nissan', 'Subaru', 'Suzuki', 'Toyota',
+  // Coréennes
+  'Hyundai', 'Kia', 'SsangYong',
+  // Autres européennes
+  'Cupra', 'Jaguar', 'Land Rover', 'Seat', 'Skoda', 'Volvo',
+  // Américaines
+  'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'Jeep', 'Tesla',
+  // Chinoises (montée Algérie)
+  'BYD', 'Chery', 'Geely', 'MG',
+].sort();
+
 const FUELS = ['Essence', 'Diesel', 'Hybride', 'Électrique'];
 const TRANSMISSIONS = ['Manuelle', 'Automatique'];
-const BODY_TYPES = ['Citadine', 'Berline', 'SUV', 'Break'];
+const BODY_TYPES = ['Citadine', 'Berline', 'SUV', 'Break', 'Coupé', 'Cabriolet', 'Monospace', 'Pick-up', 'Utilitaire'];
+const AVAILABILITIES = ['Disponible', 'Arrivage', 'Sur commande'];
 
 const fmtEUR = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' €';
 const fmtKm = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' km';
 
 const STORAGE_BUCKET = 'vehicle-photos';
+
+const availabilityStyle = (a) => {
+  if (a === 'Disponible') return 'bg-green-600 text-white';
+  if (a === 'Arrivage') return 'bg-amber-500 text-white';
+  if (a === 'Sur commande') return 'bg-blue-600 text-white';
+  return 'bg-grey-light text-dark';
+};
 
 /* ===============================================================
    GLOBAL STYLES
@@ -49,6 +80,9 @@ const GlobalStyles = () => (
     .scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
     .scrollbar-thin::-webkit-scrollbar-track { background: #F3F4F6; }
     .scrollbar-thin::-webkit-scrollbar-thumb { background: #9CA3AF; border-radius: 4px; }
+    /* Logo : fond rouge avec logo en blanc/contraste */
+    .logo-wrap-header { background: white; padding: 4px 8px; border-radius: 4px; }
+    .logo-wrap-footer { background: white; padding: 4px 8px; border-radius: 4px; display: inline-block; }
   `}</style>
 );
 
@@ -105,6 +139,20 @@ const deleteFile = async (path) => {
 };
 
 /* ===============================================================
+   LOGO COMPONENT
+=============================================================== */
+
+const Logo = ({ size = 'normal', white = false }) => {
+  const heights = { small: 'h-8', normal: 'h-10', large: 'h-14' };
+  return (
+    <div className={`logo-wrap-header inline-flex items-center`}>
+      <img src={LOGO_URL} alt="S2M Autos" className={`${heights[size]} w-auto object-contain`}
+        onError={(e) => { e.target.style.display = 'none'; }}/>
+    </div>
+  );
+};
+
+/* ===============================================================
    HEADER & FOOTER
 =============================================================== */
 
@@ -136,12 +184,12 @@ const Header = ({ page, navigate, siteInfo }) => {
 
       <header className="sticky top-0 z-40 bg-white border-b shadow-sm" style={{borderColor: '#E5E7EB'}}>
         <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="flex items-center justify-between py-4 gap-4">
-            <button onClick={() => navigate('home')} className="flex items-center gap-2 shrink-0">
-              <div className="bg-red text-white px-3 py-2 font-black text-xl tracking-tight">TM</div>
-              <div className="text-left">
-                <div className="font-bold text-dark text-lg leading-tight">{siteInfo.name}</div>
-                <div className="text-xs text-grey hidden sm:block">Export Algérie</div>
+          <div className="flex items-center justify-between py-3 gap-4">
+            <button onClick={() => navigate('home')} className="flex items-center gap-3 shrink-0">
+              <img src={LOGO_URL} alt="S2M Autos" className="h-12 md:h-14 w-auto object-contain"
+                onError={(e) => { e.target.style.display = 'none'; }}/>
+              <div className="text-left hidden sm:block">
+                <div className="text-xs text-grey uppercase tracking-wider">Export Algérie</div>
               </div>
             </button>
 
@@ -189,9 +237,9 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
     <div className="max-w-7xl mx-auto px-4 lg:px-6 py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-red text-white px-3 py-2 font-black text-xl">TM</div>
-            <div className="font-bold text-lg">{siteInfo.name}</div>
+          <div className="logo-wrap-footer mb-4">
+            <img src={LOGO_URL} alt="S2M Autos" className="h-12 w-auto object-contain"
+              onError={(e) => { e.target.style.display = 'none'; }}/>
           </div>
           <p className="text-sm text-gray-400 leading-relaxed">{siteInfo.tagline}.</p>
           <div className="flex gap-3 mt-4">
@@ -257,6 +305,11 @@ const VehicleCard = ({ v, onClick }) => (
       <div className={`absolute top-2 left-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded ${v.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>
         {v.type}
       </div>
+      {v.availability && v.availability !== 'Disponible' && (
+        <div className={`absolute top-2 right-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded ${availabilityStyle(v.availability)}`}>
+          {v.availability}
+        </div>
+      )}
     </div>
     <div className="p-4">
       <div className="text-xs text-grey font-semibold uppercase tracking-wider mb-1">{v.brand}</div>
@@ -277,16 +330,40 @@ const VehicleCard = ({ v, onClick }) => (
 =============================================================== */
 
 const HomePage = ({ data, navigate, openVehicle }) => {
-  const [searchType, setSearchType] = useState('all');
   const [searchBrand, setSearchBrand] = useState('');
+  const [searchModel, setSearchModel] = useState('');
   const [searchPrice, setSearchPrice] = useState('');
-  const brands = [...new Set(data.vehicles.map(v => v.brand))].sort();
+
+  // Compter le nombre de véhicules par marque
+  const brandCounts = useMemo(() => {
+    const counts = {};
+    data.vehicles.forEach(v => { counts[v.brand] = (counts[v.brand] || 0) + 1; });
+    return counts;
+  }, [data.vehicles]);
+
+  // Modèles disponibles selon la marque sélectionnée
+  const availableModels = useMemo(() => {
+    if (!searchBrand) return [];
+    const models = [...new Set(data.vehicles.filter(v => v.brand === searchBrand).map(v => v.model))];
+    return models.sort();
+  }, [data.vehicles, searchBrand]);
+
+  // Trier les marques : celles avec véhicules en premier, puis le reste grisé
+  const sortedBrands = useMemo(() => {
+    const withCount = ALL_BRANDS.filter(b => brandCounts[b]).sort((a, b) => {
+      if (brandCounts[b] !== brandCounts[a]) return brandCounts[b] - brandCounts[a];
+      return a.localeCompare(b);
+    });
+    const withoutCount = ALL_BRANDS.filter(b => !brandCounts[b]);
+    return [...withCount, ...withoutCount];
+  }, [brandCounts]);
+
   const recent = data.vehicles.slice(0, 8);
   const siteInfo = data.siteInfo;
+
   const submitSearch = () => {
-    let target = 'catalog-neuf';
-    if (searchType === 'occasion') target = 'catalog-occasion';
-    navigate(target);
+    // Si modèle ou marque sélectionné on va sur catalogue, sinon catalog-neuf par défaut
+    navigate('catalog-neuf');
   };
 
   return (
@@ -328,18 +405,25 @@ const HomePage = ({ data, navigate, openVehicle }) => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <div>
-                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Type</label>
-                <select value={searchType} onChange={e => setSearchType(e.target.value)} className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}>
-                  <option value="all">Tous</option>
-                  <option value="neuf">Neuf</option>
-                  <option value="occasion">Occasion</option>
+                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Marque</label>
+                <select value={searchBrand} onChange={e => { setSearchBrand(e.target.value); setSearchModel(''); }} className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}>
+                  <option value="">Toutes les marques</option>
+                  {sortedBrands.map(b => {
+                    const count = brandCounts[b];
+                    return (
+                      <option key={b} value={b} disabled={!count} style={!count ? {color: '#9CA3AF'} : {}}>
+                        {b} {count ? `(${count})` : ''}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div>
-                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Marque</label>
-                <select value={searchBrand} onChange={e => setSearchBrand(e.target.value)} className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}>
-                  <option value="">Toutes</option>
-                  {brands.map(b => <option key={b}>{b}</option>)}
+                <label className="text-xs text-grey font-semibold uppercase tracking-wider mb-1.5 block">Modèle</label>
+                <select value={searchModel} onChange={e => setSearchModel(e.target.value)} disabled={!searchBrand}
+                  className="w-full border rounded px-3 py-2.5 text-dark focus:border-red outline-none disabled:bg-grey-light disabled:cursor-not-allowed" style={{borderColor: '#E5E7EB'}}>
+                  <option value="">{searchBrand ? 'Tous les modèles' : 'Choisir une marque'}</option>
+                  {availableModels.map(m => <option key={m}>{m}</option>)}
                 </select>
               </div>
               <div>
@@ -435,7 +519,14 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
   const [maxPrice, setMaxPrice] = useState('');
   const [sort, setSort] = useState('default');
 
-  const brands = [...new Set(data.vehicles.map(v => v.brand))].sort();
+  // Compter et trier les marques pour le filtre
+  const brandCounts = useMemo(() => {
+    const counts = {};
+    data.vehicles.filter(v => filterType === 'all' || v.type === filterType).forEach(v => {
+      counts[v.brand] = (counts[v.brand] || 0) + 1;
+    });
+    return counts;
+  }, [data.vehicles, filterType]);
 
   const filtered = useMemo(() => {
     let out = data.vehicles.filter(v => {
@@ -459,6 +550,13 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
 
   const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "Véhicules d'Occasion" : 'Tous les Véhicules';
 
+  // Trier marques avec compteurs
+  const sortedBrands = useMemo(() => {
+    const withCount = ALL_BRANDS.filter(b => brandCounts[b]).sort((a, b) => brandCounts[b] - brandCounts[a]);
+    const withoutCount = ALL_BRANDS.filter(b => !brandCounts[b]);
+    return [...withCount, ...withoutCount];
+  }, [brandCounts]);
+
   return (
     <main className="bg-grey-light min-h-screen">
       <section className="bg-dark text-white py-10">
@@ -481,7 +579,10 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
             </div>
             <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)} className="border rounded px-3 py-2 text-sm focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}>
               <option value="">Marque</option>
-              {brands.map(b => <option key={b}>{b}</option>)}
+              {sortedBrands.map(b => {
+                const count = brandCounts[b];
+                return <option key={b} value={b} disabled={!count} style={!count ? {color: '#9CA3AF'} : {}}>{b} {count ? `(${count})` : ''}</option>;
+              })}
             </select>
             <select value={fuelFilter} onChange={e => setFuelFilter(e.target.value)} className="border rounded px-3 py-2 text-sm focus:border-red outline-none" style={{borderColor: '#E5E7EB'}}>
               <option value="">Carburant</option>
@@ -527,22 +628,19 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
 };
 
 /* ===============================================================
-   PAGE — VEHICLE DETAIL (avec galerie photos)
+   PAGE — VEHICLE DETAIL (avec galerie photos + toutes caractéristiques)
 =============================================================== */
 
 const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
   const [mainImage, setMainImage] = useState(null);
   const [vehicleImages, setVehicleImages] = useState([]);
-  const [imagesLoading, setImagesLoading] = useState(false);
 
   useEffect(() => {
     const loadImages = async () => {
       if (!vehicle) return;
-      setImagesLoading(true);
       const { data: imgs } = await supabase.from('vehicle_images').select('*').eq('vehicle_id', vehicle.id).order('position', { ascending: true });
       setVehicleImages(imgs || []);
       setMainImage(vehicle.image);
-      setImagesLoading(false);
     };
     loadImages();
   }, [vehicle]);
@@ -562,6 +660,24 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
   const equipment = Array.isArray(vehicle.equipment) ? vehicle.equipment : [];
   const siteInfo = data.siteInfo;
   const allImages = [{ url: vehicle.image, isMain: true }, ...vehicleImages.map(i => ({ url: i.url, isMain: false }))];
+
+  // TOUTES les caractéristiques (affichage complet)
+  const allSpecs = [
+    { l: 'Marque', v: vehicle.brand, icon: Car },
+    { l: 'Modèle', v: vehicle.model, icon: Car },
+    { l: 'Version', v: vehicle.version, icon: Sparkles },
+    { l: 'Type', v: vehicle.type === 'neuf' ? 'Neuf' : 'Occasion', icon: Star },
+    { l: 'Année', v: vehicle.year, icon: Calendar },
+    { l: 'Kilométrage', v: fmtKm(vehicle.mileage), icon: Gauge },
+    { l: 'Carburant', v: vehicle.fuel, icon: Fuel },
+    { l: 'Boîte de vitesses', v: vehicle.transmission, icon: Cog },
+    { l: 'Puissance', v: `${vehicle.power} ch`, icon: Sparkles },
+    { l: 'Carrosserie', v: vehicle.body_type, icon: Car },
+    { l: 'Couleur', v: vehicle.color, icon: Palette },
+    { l: 'Portes', v: vehicle.doors, icon: DoorOpen },
+    { l: 'Places', v: vehicle.seats, icon: Users },
+    { l: 'Disponibilité', v: vehicle.availability || 'Disponible', icon: Package },
+  ].filter(s => s.v !== null && s.v !== undefined && s.v !== '');
 
   return (
     <main className="bg-grey-light min-h-screen pb-16">
@@ -583,7 +699,6 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
                   {vehicle.type}
                 </div>
               </div>
-              {/* Miniatures galerie */}
               {allImages.length > 1 && (
                 <div className="p-3 grid grid-cols-5 gap-2 bg-grey-light">
                   {allImages.map((img, i) => (
@@ -600,6 +715,13 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
               <div className="text-xs text-grey font-semibold uppercase tracking-wider mb-1">{vehicle.brand} · {vehicle.year}</div>
               <h1 className="text-2xl lg:text-3xl font-black text-dark mb-1">{vehicle.model}</h1>
               <div className="text-grey mb-4">{vehicle.version}</div>
+
+              {/* BADGE DISPONIBILITÉ au-dessus du prix */}
+              {vehicle.availability && (
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider mb-3 ${availabilityStyle(vehicle.availability)}`}>
+                  <Package size={12}/>{vehicle.availability}
+                </div>
+              )}
 
               <div className="bg-grey-light p-4 rounded mb-6">
                 <div className="text-xs text-grey font-semibold uppercase mb-1">Prix export Algérie</div>
@@ -624,22 +746,17 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
           </div>
         </div>
 
+        {/* TOUTES les caractéristiques en dessous */}
         <div className="bg-white rounded shadow-sm mt-6 p-6 lg:p-8">
-          <h2 className="text-xl font-black text-dark mb-6">Caractéristiques</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { l: 'Année', v: vehicle.year },
-              { l: 'Kilométrage', v: fmtKm(vehicle.mileage) },
-              { l: 'Carburant', v: vehicle.fuel },
-              { l: 'Boîte', v: vehicle.transmission },
-              { l: 'Puissance', v: `${vehicle.power} ch` },
-              { l: 'Carrosserie', v: vehicle.body_type },
-              { l: 'Couleur', v: vehicle.color },
-              { l: 'Places', v: vehicle.seats },
-            ].map((s, i) => (
-              <div key={i} className="border-l-4 border-red pl-3 py-1">
-                <div className="text-xs text-grey font-semibold uppercase tracking-wider">{s.l}</div>
-                <div className="font-bold text-dark mt-0.5">{s.v}</div>
+          <h2 className="text-xl font-black text-dark mb-6">Toutes les caractéristiques</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {allSpecs.map((s, i) => (
+              <div key={i} className="border-l-4 border-red pl-3 py-2 bg-grey-light/50 rounded-r">
+                <div className="flex items-center gap-2 mb-1">
+                  <s.icon size={14} className="text-red"/>
+                  <div className="text-xs text-grey font-semibold uppercase tracking-wider">{s.l}</div>
+                </div>
+                <div className="font-bold text-dark text-sm">{s.v}</div>
               </div>
             ))}
           </div>
@@ -650,7 +767,7 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
             {vehicle.description && (
               <>
                 <h2 className="text-xl font-black text-dark mb-4">Description</h2>
-                <p className="text-grey leading-relaxed mb-6">{vehicle.description}</p>
+                <p className="text-grey leading-relaxed mb-6 whitespace-pre-wrap">{vehicle.description}</p>
               </>
             )}
             {equipment.length > 0 && (
@@ -963,7 +1080,10 @@ const AdminLayout = ({ children, current, navAdmin, onLogout, user, data }) => {
       <GlobalStyles />
       <aside className="w-64 bg-dark text-white flex flex-col h-screen sticky top-0">
         <div className="p-5 border-b border-gray-700">
-          <div className="font-black text-lg">{data.siteInfo.name}</div>
+          <div className="logo-wrap-footer mb-2">
+            <img src={LOGO_URL} alt="" className="h-10 w-auto object-contain"
+              onError={(e) => { e.target.style.display = 'none'; }}/>
+          </div>
           <div className="text-xs text-red uppercase tracking-wider mt-1">BackOffice</div>
         </div>
         <nav className="flex-1 overflow-y-auto p-3 space-y-1">
@@ -1070,7 +1190,7 @@ const AdminPageHeader = ({ title, onAdd, addLabel = "Ajouter" }) => (
 );
 
 /* ===============================================================
-   ADMIN — VEHICLE FORM (2 ÉTAPES)
+   ADMIN — VEHICLE FORM (2 ÉTAPES + DISPONIBILITÉ + LISTE MARQUES)
 =============================================================== */
 
 const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
@@ -1078,7 +1198,6 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
   const [saving, setSaving] = useState(false);
   const [savedVehicleId, setSavedVehicleId] = useState(vehicle?.id || null);
 
-  // ÉTAPE 1 : informations
   const [info, setInfo] = useState({
     brand: vehicle?.brand || '',
     model: vehicle?.model || '',
@@ -1100,9 +1219,12 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
     image: vehicle?.image || '',
     image_storage_path: vehicle?.image_storage_path || null,
     price: vehicle?.price || 0,
+    availability: vehicle?.availability || 'Disponible',
   });
 
-  // ÉTAPE 2 : photos
+  // Equipment géré comme texte multi-lignes (pour permettre Entrée)
+  const [equipmentText, setEquipmentText] = useState((Array.isArray(vehicle?.equipment) ? vehicle.equipment : []).join('\n'));
+
   const mainFileRef = useRef(null);
   const galleryFileRef = useRef(null);
   const [mainImage, setMainImage] = useState(vehicle?.image || '');
@@ -1111,7 +1233,6 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
   const [uploadingMain, setUploadingMain] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
 
-  // Charger les photos secondaires existantes
   useEffect(() => {
     const loadExisting = async () => {
       if (vehicle?.id) {
@@ -1122,11 +1243,13 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
     loadExisting();
   }, [vehicle?.id]);
 
-  // ÉTAPE 1 : sauvegarder les infos
   const saveStep1 = async (e) => {
     e.preventDefault();
+    if (!info.brand) { showToast('Veuillez choisir une marque', 'error'); return; }
     setSaving(true);
-    const payload = { ...info };
+    // Convertir le texte equipment en tableau (split par retour à la ligne)
+    const equipment = equipmentText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    const payload = { ...info, equipment };
     let result, vId;
     if (savedVehicleId) {
       vId = savedVehicleId;
@@ -1147,49 +1270,36 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
     setStep(2);
   };
 
-  // ÉTAPE 2 : upload photo principale
   const handleMainUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      showToast('Photo trop lourde (max 5 MB)', 'error');
-      return;
-    }
+    if (file.size > 5 * 1024 * 1024) { showToast('Photo trop lourde (max 5 MB)', 'error'); return; }
     setUploadingMain(true);
     try {
-      // Supprimer l'ancienne photo principale si elle est dans le storage
       if (mainImagePath) await deleteFile(mainImagePath);
       const { url, path } = await uploadFile(file, savedVehicleId);
       setMainImage(url);
       setMainImagePath(path);
-      // Mettre à jour la BDD
       await supabase.from('vehicles').update({ image: url, image_storage_path: path }).eq('id', savedVehicleId);
       showToast('Photo principale enregistrée');
     } catch (err) {
       showToast('Erreur upload : ' + err.message, 'error');
     }
     setUploadingMain(false);
-    e.target.value = ''; // reset input
+    e.target.value = '';
   };
 
-  // ÉTAPE 2 : upload photos galerie
   const handleGalleryUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
     setUploadingGallery(true);
     try {
       for (const file of files) {
-        if (file.size > 5 * 1024 * 1024) {
-          showToast(`${file.name} trop lourd, ignoré`, 'error');
-          continue;
-        }
+        if (file.size > 5 * 1024 * 1024) { showToast(`${file.name} trop lourd, ignoré`, 'error'); continue; }
         const { url, path } = await uploadFile(file, savedVehicleId);
         const position = galleryImages.length + 1;
         const { data: newImg } = await supabase.from('vehicle_images').insert([{
-          vehicle_id: savedVehicleId,
-          url,
-          storage_path: path,
-          position,
+          vehicle_id: savedVehicleId, url, storage_path: path, position,
         }]).select().single();
         setGalleryImages(prev => [...prev, newImg]);
       }
@@ -1201,7 +1311,6 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
     e.target.value = '';
   };
 
-  // Supprimer une photo de galerie
   const removeGalleryImage = async (img) => {
     if (!confirm('Supprimer cette photo ?')) return;
     await deleteFile(img.storage_path);
@@ -1210,42 +1319,30 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
     showToast('Photo supprimée');
   };
 
-  // Définir une photo de galerie comme principale (échange)
   const setAsMain = async (img) => {
     const oldMain = mainImage;
     const oldMainPath = mainImagePath;
-    // Met l'image de galerie en principale
     setMainImage(img.url);
     setMainImagePath(img.storage_path);
     await supabase.from('vehicles').update({ image: img.url, image_storage_path: img.storage_path }).eq('id', savedVehicleId);
-    // Met l'ancienne principale en galerie
     if (oldMain && oldMainPath) {
       const newPos = galleryImages.length + 1;
       const { data: newGalleryItem } = await supabase.from('vehicle_images').insert([{
-        vehicle_id: savedVehicleId,
-        url: oldMain,
-        storage_path: oldMainPath,
-        position: newPos,
+        vehicle_id: savedVehicleId, url: oldMain, storage_path: oldMainPath, position: newPos,
       }]).select().single();
-      // Et retire l'image qu'on vient de mettre en principale de la galerie
       await supabase.from('vehicle_images').delete().eq('id', img.id);
       setGalleryImages(prev => prev.filter(x => x.id !== img.id).concat(newGalleryItem));
     } else {
-      // Pas d'ancienne principale, juste retire de la galerie
       await supabase.from('vehicle_images').delete().eq('id', img.id);
       setGalleryImages(prev => prev.filter(x => x.id !== img.id));
     }
     showToast('Photo principale changée');
   };
 
-  const finish = () => {
-    onSaved();
-    onClose();
-  };
+  const finish = () => { onSaved(); onClose(); };
 
   return (
     <Modal title={vehicle?.id ? `Modifier — ${vehicle.brand} ${vehicle.model}` : 'Nouveau véhicule'} onClose={onClose} wide>
-      {/* Steps indicator */}
       <div className="flex items-center gap-3 mb-6 pb-4 border-b" style={{borderColor: '#E5E7EB'}}>
         <div className={`flex items-center gap-2 ${step === 1 ? 'text-red' : 'text-grey'}`}>
           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step === 1 ? 'bg-red text-white' : savedVehicleId ? 'bg-green-500 text-white' : 'bg-grey-light text-grey'}`}>
@@ -1263,10 +1360,20 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
       {step === 1 && (
         <form onSubmit={saveStep1} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field label="Marque *"><input required value={info.brand} onChange={e => setInfo({...info, brand: e.target.value})} className={inp} style={inpStyle} placeholder="ex: Peugeot"/></Field>
+            <Field label="Marque *">
+              <select required value={info.brand} onChange={e => setInfo({...info, brand: e.target.value})} className={inp} style={inpStyle}>
+                <option value="">— Choisir une marque —</option>
+                {ALL_BRANDS.map(b => <option key={b}>{b}</option>)}
+              </select>
+            </Field>
             <Field label="Modèle *"><input required value={info.model} onChange={e => setInfo({...info, model: e.target.value})} className={inp} style={inpStyle} placeholder="ex: 3008"/></Field>
             <Field label="Version" full><input value={info.version} onChange={e => setInfo({...info, version: e.target.value})} className={inp} style={inpStyle} placeholder="ex: GT BlueHDi 130 EAT8"/></Field>
             <Field label="Type"><select value={info.type} onChange={e => setInfo({...info, type: e.target.value})} className={inp} style={inpStyle}><option value="neuf">Neuf</option><option value="occasion">Occasion</option></select></Field>
+            <Field label="Disponibilité">
+              <select value={info.availability} onChange={e => setInfo({...info, availability: e.target.value})} className={inp} style={inpStyle}>
+                {AVAILABILITIES.map(a => <option key={a}>{a}</option>)}
+              </select>
+            </Field>
             <Field label="Carrosserie"><select value={info.body_type} onChange={e => setInfo({...info, body_type: e.target.value})} className={inp} style={inpStyle}>{BODY_TYPES.map(b => <option key={b}>{b}</option>)}</select></Field>
             <Field label="Année"><input type="number" value={info.year} onChange={e => setInfo({...info, year: parseInt(e.target.value)})} className={inp} style={inpStyle}/></Field>
             <Field label="Kilométrage"><input type="number" value={info.mileage} onChange={e => setInfo({...info, mileage: parseInt(e.target.value)})} className={inp} style={inpStyle}/></Field>
@@ -1278,7 +1385,11 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
             <Field label="Places"><input type="number" value={info.seats} onChange={e => setInfo({...info, seats: parseInt(e.target.value)})} className={inp} style={inpStyle}/></Field>
             <Field label="Prix EUR *"><input required type="number" value={info.price_eur} onChange={e => setInfo({...info, price_eur: parseInt(e.target.value)})} className={inp} style={inpStyle}/></Field>
             <Field label="Description" full><textarea rows={3} value={info.description} onChange={e => setInfo({...info, description: e.target.value})} className={`${inp} resize-none`} style={inpStyle}/></Field>
-            <Field label="Équipements (un par ligne)" full><textarea rows={4} value={info.equipment.join('\n')} onChange={e => setInfo({...info, equipment: e.target.value.split('\n').filter(x => x.trim())})} className={`${inp} resize-none`} style={inpStyle}/></Field>
+            <Field label="Équipements (un par ligne — appuyez sur Entrée pour aller à la ligne)" full>
+              <textarea rows={6} value={equipmentText} onChange={e => setEquipmentText(e.target.value)}
+                placeholder={"GPS\nClimatisation auto\nCaméra de recul\nJantes 17"}
+                className={`${inp} resize-y font-mono text-xs`} style={inpStyle}/>
+            </Field>
             <Field label="" full>
               <label className="flex items-center gap-2 text-dark cursor-pointer text-sm"><input type="checkbox" checked={info.featured} onChange={e => setInfo({...info, featured: e.target.checked})} className="w-4 h-4 accent-red"/>Mettre en avant sur la page d'accueil</label>
             </Field>
@@ -1296,7 +1407,6 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
 
       {step === 2 && (
         <div className="space-y-6">
-          {/* Photo principale */}
           <div>
             <h3 className="font-black text-dark mb-3">Photo principale</h3>
             <p className="text-sm text-grey mb-4">C'est la photo qui s'affichera dans le catalogue et en grand sur la fiche.</p>
@@ -1318,7 +1428,6 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
             <input ref={mainFileRef} type="file" accept="image/*" onChange={handleMainUpload} className="hidden"/>
           </div>
 
-          {/* Galerie */}
           <div className="pt-6 border-t" style={{borderColor: '#E5E7EB'}}>
             <div className="flex items-center justify-between mb-3 flex-wrap gap-3">
               <div>
@@ -1379,20 +1488,17 @@ const VehicleForm = ({ vehicle, onClose, onSaved, showToast }) => {
 =============================================================== */
 
 const AdminVehicles = ({ data, refresh, showToast }) => {
-  const [edit, setEdit] = useState(null); // null = fermé, {} = nouveau, {...v} = modifier
+  const [edit, setEdit] = useState(null);
   const [filter, setFilter] = useState('');
 
   const remove = async (vehicle) => {
     if (!confirm(`Supprimer "${vehicle.brand} ${vehicle.model}" ? Cette action supprimera aussi toutes ses photos.`)) return;
-    // Récupérer toutes les photos de galerie pour les supprimer du Storage
     const { data: imgs } = await supabase.from('vehicle_images').select('storage_path').eq('vehicle_id', vehicle.id);
     if (imgs) {
       const paths = imgs.filter(i => i.storage_path).map(i => i.storage_path);
       if (paths.length) await supabase.storage.from(STORAGE_BUCKET).remove(paths);
     }
-    // Supprimer la photo principale du Storage
     if (vehicle.image_storage_path) await deleteFile(vehicle.image_storage_path);
-    // Supprimer le véhicule (cascade supprime vehicle_images)
     const { error } = await supabase.from('vehicles').delete().eq('id', vehicle.id);
     if (error) showToast('Erreur : ' + error.message, 'error');
     else { showToast('Véhicule supprimé'); refresh(); }
@@ -1418,7 +1524,7 @@ const AdminVehicles = ({ data, refresh, showToast }) => {
           <thead className="border-b" style={inpStyle}>
             <tr className="text-xs uppercase tracking-wider text-grey">
               <th className="p-3">Photo</th><th className="p-3">Véhicule</th><th className="p-3">Type</th>
-              <th className="p-3">Année</th><th className="p-3">Prix</th><th className="p-3 text-right">Actions</th>
+              <th className="p-3">Dispo</th><th className="p-3">Année</th><th className="p-3">Prix</th><th className="p-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -1430,6 +1536,7 @@ const AdminVehicles = ({ data, refresh, showToast }) => {
                   <div className="text-xs text-grey">{v.version}</div>
                 </td>
                 <td className="p-3"><span className={`text-xs uppercase font-bold px-2 py-1 rounded ${v.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>{v.type}</span></td>
+                <td className="p-3"><span className={`text-xs uppercase font-bold px-2 py-1 rounded ${availabilityStyle(v.availability || 'Disponible')}`}>{v.availability || 'Disponible'}</span></td>
                 <td className="p-3 text-grey">{v.year}</td>
                 <td className="p-3 font-bold text-red">{fmtEUR(v.price_eur)}</td>
                 <td className="p-3">
@@ -1458,19 +1565,44 @@ const AdminVehicles = ({ data, refresh, showToast }) => {
 };
 
 /* ===============================================================
-   ADMIN — CONTACTS
+   ADMIN — CONTACTS (corrigé : recharge correctement)
 =============================================================== */
 
 const AdminContacts = ({ data, refresh, showToast }) => {
+  const [contacts, setContacts] = useState(data.contacts || []);
+  const [loading, setLoading] = useState(false);
+
+  // Recharger directement les demandes au montage (corrige le bug)
+  useEffect(() => {
+    const reload = async () => {
+      setLoading(true);
+      const { data: ct, error } = await supabase.from('contacts').select('*').order('created_at', { ascending: false });
+      setLoading(false);
+      if (!error) setContacts(ct || []);
+    };
+    reload();
+  }, []);
+
   const remove = async (id) => {
     if (!confirm('Supprimer cette demande ?')) return;
     const { error } = await supabase.from('contacts').delete().eq('id', id);
-    if (error) showToast('Erreur : ' + error.message, 'error'); else { showToast('Demande supprimée'); refresh(); }
+    if (error) showToast('Erreur : ' + error.message, 'error');
+    else {
+      showToast('Demande supprimée');
+      setContacts(prev => prev.filter(c => c.id !== id));
+      refresh();
+    }
   };
+
   return (
     <div className="p-8">
       <AdminPageHeader title="Demandes de contact"/>
-      {data.contacts.length === 0 ? (
+      {loading ? (
+        <div className="bg-white rounded shadow-sm p-12 text-center">
+          <Loader2 size={32} className="anim-spin mx-auto text-red mb-4"/>
+          <p className="text-grey text-sm">Chargement des demandes...</p>
+        </div>
+      ) : contacts.length === 0 ? (
         <div className="bg-white rounded shadow-sm p-12 text-center">
           <Mail size={48} className="mx-auto text-grey mb-4"/>
           <div className="font-black text-dark text-xl mb-2">Aucune demande pour l'instant</div>
@@ -1478,7 +1610,7 @@ const AdminContacts = ({ data, refresh, showToast }) => {
         </div>
       ) : (
         <div className="space-y-3">
-          {data.contacts.map(c => (
+          {contacts.map(c => (
             <div key={c.id} className="bg-white rounded shadow-sm p-5">
               <div className="flex items-start justify-between mb-3 gap-3">
                 <div className="min-w-0">
