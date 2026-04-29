@@ -161,7 +161,7 @@ const Header = ({ page, navigate, siteInfo }) => {
   const links = [
     { id: 'home', label: 'Accueil' },
     { id: 'catalog-neuf', label: 'Véhicules Neufs' },
-    { id: 'catalog-occasion', label: 'Occasions' },
+    { id: 'catalog-occasion', label: 'Véhicules d'occasion' },
     { id: 'about', label: 'Qui sommes-nous' },
     { id: 'contact', label: 'Contact' },
   ];
@@ -542,7 +542,7 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
     setSearch(''); setBrandFilter(''); setFuelFilter(''); setTransFilter(''); setMaxPrice(''); setSort('default');
   };
 
-  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "Véhicules d'Occasion" : 'Tous les Véhicules';
+  const title = filterType === 'neuf' ? 'Véhicules Neufs' : filterType === 'occasion' ? "Véhicules d'occasion" : 'Tous les Véhicules';
 
   // Trier marques avec compteurs
   const sortedBrands = useMemo(() => {
