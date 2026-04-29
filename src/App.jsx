@@ -156,15 +156,14 @@ const Logo = ({ size = 'normal', white = false }) => {
    HEADER & FOOTER
 =============================================================== */
 
-const Header = ({ page, navigate, siteInfo }) => {
-  const [open, setOpen] = useState(false);
-  const links = [
-    { id: 'home', label: 'Accueil' },
-    { id: 'catalog-neuf', label: 'Véhicules Neufs' },
-    { id: 'catalog-occasion', label: 'Véhicules d'occasion' },
-    { id: 'about', label: 'Qui sommes-nous' },
-    { id: 'contact', label: 'Contact' },
-  ];
+const links = [
+  { id: 'home', label: 'Accueil' },
+  { id: 'catalog-all', label: 'Tous les véhicules' },
+  { id: 'catalog-neuf', label: 'Véhicules Neufs' },
+  { id: 'catalog-occasion', label: 'Véhicules d\'occasion' },
+  { id: 'about', label: 'Qui sommes-nous' },
+  { id: 'contact', label: 'Contact' },
+];
 
   return (
     <>
