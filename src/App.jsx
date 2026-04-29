@@ -299,7 +299,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
 
 const VehicleCard = ({ v, onClick }) => (
   <button onClick={onClick} className="group text-left bg-white border rounded overflow-hidden hover:shadow-lg flex flex-col" style={{borderColor: '#E5E7EB'}}>
-    <div className="relative aspect-[4/3] overflow-hidden">
+    <div className="relative aspect-[16/10] overflow-hidden">
       <SafeImg src={v.image} alt={`${v.brand} ${v.model}`} className="w-full h-full" fit="contain" />
       <div className={`absolute top-2 left-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded ${v.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>
         {v.type}
@@ -312,9 +312,9 @@ const VehicleCard = ({ v, onClick }) => (
     </div>
     <div className="p-4 flex flex-col flex-1">
       <div className="text-xs text-grey font-semibold uppercase tracking-wider mb-1">{v.brand}</div>
-      <h3 className="font-bold text-dark text-lg leading-tight mb-1 group-hover:text-red">{v.model}</h3>
+      <h3 className="font-bold text-dark text-xl leading-tight mb-1 group-hover:text-red">{v.model}</h3>
       <div className="text-xs text-grey mb-3 line-clamp-1">{v.version}</div>
-      <div className="text-2xl font-black text-red mb-3">{fmtEUR(v.price_eur)}</div>
+      <div className="text-3xl font-black text-red mb-3">{fmtEUR(v.price_eur)}</div>
 
       {/* Specs étendues */}
       <div className="grid grid-cols-2 gap-2 text-xs text-grey pt-3 border-t mb-3" style={{borderColor: '#E5E7EB'}}>
@@ -463,7 +463,7 @@ const HomePage = ({ data, navigate, openVehicle }) => {
                 Voir tout le catalogue <ArrowRight size={14}/>
               </button>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recent.map(v => <VehicleCard key={v.id} v={v} onClick={() => openVehicle(v)} />)}
             </div>
           </div>
@@ -629,7 +629,7 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
             <button onClick={reset} className="bg-red text-white px-6 py-2.5 rounded font-bold text-sm bg-red-hover">Réinitialiser</button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map(v => <VehicleCard key={v.id} v={v} onClick={() => openVehicle(v)} />)}
           </div>
         )}
