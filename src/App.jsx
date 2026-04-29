@@ -86,9 +86,9 @@ const GlobalStyles = () => (
   `}</style>
 );
 
-const SafeImg = ({ src, alt, className }) => (
+const SafeImg = ({ src, alt, className, fit = 'cover' }) => (
   <div className={`relative img-fallback overflow-hidden ${className || ''}`}>
-    <img src={src} alt={alt} loading="lazy" className="w-full h-full object-cover"
+    <img src={src} alt={alt} loading="lazy" className={`w-full h-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
       onError={(e) => { e.target.style.display = 'none'; }} />
   </div>
 );
@@ -300,7 +300,7 @@ const Footer = ({ navigate, openAdmin, siteInfo }) => (
 const VehicleCard = ({ v, onClick }) => (
   <button onClick={onClick} className="group text-left bg-white border rounded overflow-hidden hover:shadow-lg flex flex-col" style={{borderColor: '#E5E7EB'}}>
     <div className="relative aspect-[4/3] overflow-hidden">
-      <SafeImg src={v.image} alt={`${v.brand} ${v.model}`} className="w-full h-full" />
+      <SafeImg src={v.image} alt={`${v.brand} ${v.model}`} className="w-full h-full" fit="contain" />
       <div className={`absolute top-2 left-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded ${v.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>
         {v.type}
       </div>
@@ -703,25 +703,48 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
 
         <div className="bg-white rounded shadow-sm overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-            <div className="lg:col-span-7">
-              <div className="relative">
-                <SafeImg src={mainImage || vehicle.image} alt="" className="aspect-[4/3]" />
-                <div className={`absolute top-4 left-4 px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded ${vehicle.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>
-                  {vehicle.type}
-                </div>
-              </div>
-              {allImages.length > 1 && (
-                <div className="p-3 grid grid-cols-5 gap-2 bg-grey-light">
-                  {allImages.map((img, i) => (
-                    <button key={i} onClick={() => setMainImage(img.url)}
-                      className={`relative aspect-[4/3] overflow-hidden rounded ${mainImage === img.url ? 'ring-2 ring-red' : 'opacity-70 hover:opacity-100'}`}>
-                      <SafeImg src={img.url} alt="" className="w-full h-full"/>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
+       <div className="lg:col-span-7">
+  <div className="relative bg-grey-light">
+    <SafeImg src={mainImage || vehicle.image} alt="" className="aspect-[4/3]" fit="contain" />
+    <div className={`absolute top-4 left-4 px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded ${vehicle.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>
+      {vehicle.type}
+    </div>
+    {/* FLECHES NAVIGATION */}
+    {allImages.length > 1 && (
+      <>
+        <button onClick={() => {
+          const currentIdx = allImages.findIndex(img => img.url === mainImage);
+          const prevIdx = (currentIdx - 1 + allImages.length) % allImages.length;
+          setMainImage(allImages[prevIdx].url);
+        }} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white text-dark rounded-full flex items-center justify-center shadow-lg" title="Photo précédente">
+          <ChevronLeft size={20}/>
+        </button>
+        <button onClick={() => {
+          const currentIdx = allImages.findIndex(img => img.url === mainImage);
+          const nextIdx = (currentIdx + 1) % allImages.length;
+          setMainImage(allImages[nextIdx].url);
+        }} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white text-dark rounded-full flex items-center justify-center shadow-lg" title="Photo suivante">
+          <ChevronRight size={20}/>
+        </button>
+        {/* Compteur photos */}
+        <div className="absolute bottom-3 right-3 bg-black/70 text-white px-3 py-1 rounded text-xs font-bold">
+          {allImages.findIndex(img => img.url === mainImage) + 1} / {allImages.length}
+        </div>
+      </>
+    )}
+  </div>
+  {/* MINIATURES (gardées en plus des flèches) */}
+  {allImages.length > 1 && (
+    <div className="p-3 grid grid-cols-5 gap-2 bg-grey-light border-t" style={{borderColor: '#E5E7EB'}}>
+      {allImages.map((img, i) => (
+        <button key={i} onClick={() => setMainImage(img.url)}
+          className={`relative aspect-[4/3] overflow-hidden rounded bg-white ${mainImage === img.url ? 'ring-2 ring-red' : 'opacity-70 hover:opacity-100'}`}>
+          <SafeImg src={img.url} alt="" className="w-full h-full" fit="contain"/>
+        </button>
+      ))}
+    </div>
+  )}
+</div>
             <div className="lg:col-span-5 p-6 lg:p-8">
               <div className="text-xs text-grey font-semibold uppercase tracking-wider mb-1">{vehicle.brand} · {vehicle.year}</div>
               <h1 className="text-2xl lg:text-3xl font-black text-dark mb-1">{vehicle.model}</h1>
