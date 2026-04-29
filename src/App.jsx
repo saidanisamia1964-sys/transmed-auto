@@ -1568,19 +1568,19 @@ const AdminVehicles = ({ data, refresh, showToast }) => {
 =============================================================== */
 
 const AdminContacts = ({ data, refresh, showToast }) => {
-  const [contacts, setContacts] = useState(data.contacts || []);
   const [loading, setLoading] = useState(false);
 
-  // Recharger directement les demandes au montage (corrige le bug)
+  // Recharger les données depuis Supabase au montage
   useEffect(() => {
     const reload = async () => {
       setLoading(true);
-      const { data: ct, error } = await supabase.from('contacts').select('*').order('created_at', { ascending: false });
+      await refresh();
       setLoading(false);
-      if (!error) setContacts(ct || []);
     };
     reload();
   }, []);
+
+  const contacts = data.contacts || [];
 
   const remove = async (id) => {
     if (!confirm('Supprimer cette demande ?')) return;
@@ -1588,7 +1588,6 @@ const AdminContacts = ({ data, refresh, showToast }) => {
     if (error) showToast('Erreur : ' + error.message, 'error');
     else {
       showToast('Demande supprimée');
-      setContacts(prev => prev.filter(c => c.id !== id));
       refresh();
     }
   };
