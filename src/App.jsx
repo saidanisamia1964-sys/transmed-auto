@@ -676,6 +676,51 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
   ].filter(s => s.v !== null && s.v !== undefined && s.v !== '');
 
 return (
+  <>
+    {/* LIGHTBOX */}
+    {lightboxOpen && (
+      <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4" onClick={() => setLightboxOpen(false)}>
+        {/* Bouton fermer */}
+        <button onClick={() => setLightboxOpen(false)} className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center z-10">
+          <X size={24}/>
+        </button>
+
+        {/* Compteur photos */}
+        {allImages.length > 1 && (
+          <div className="absolute top-4 left-4 bg-white/10 text-white px-4 py-2 rounded-full text-sm font-bold">
+            {allImages.findIndex(img => img.url === mainImage) + 1} / {allImages.length}
+          </div>
+        )}
+
+        {/* Flèche gauche */}
+        {allImages.length > 1 && (
+          <button onClick={(e) => {
+            e.stopPropagation();
+            const currentIdx = allImages.findIndex(img => img.url === mainImage);
+            const prevIdx = (currentIdx - 1 + allImages.length) % allImages.length;
+            setMainImage(allImages[prevIdx].url);
+          }} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center z-10">
+            <ChevronLeft size={28}/>
+          </button>
+        )}
+
+        {/* Image agrandie */}
+        <img src={mainImage || vehicle.image} alt="" className="max-w-full max-h-[90vh] object-contain" onClick={(e) => e.stopPropagation()}/>
+
+        {/* Flèche droite */}
+        {allImages.length > 1 && (
+          <button onClick={(e) => {
+            e.stopPropagation();
+            const currentIdx = allImages.findIndex(img => img.url === mainImage);
+            const nextIdx = (currentIdx + 1) % allImages.length;
+            setMainImage(allImages[nextIdx].url);
+          }} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center z-10">
+            <ChevronRight size={28}/>
+          </button>
+        )}
+      </div>
+    )}
+
   <main className="bg-grey-light min-h-screen pb-16">
     <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
         <nav className="text-sm text-grey mb-4 flex items-center gap-2 flex-wrap">
@@ -814,7 +859,8 @@ return (
           </div>
         )}
       </div>
-    </main>
+</main>
+  </>
   );
 };
 
