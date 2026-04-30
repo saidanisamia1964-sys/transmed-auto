@@ -629,7 +629,8 @@ const CatalogPage = ({ data, filterType, openVehicle, navigate }) => {
 const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
   const [mainImage, setMainImage] = useState(null);
   const [vehicleImages, setVehicleImages] = useState([]);
-
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  
   useEffect(() => {
     const loadImages = async () => {
       if (!vehicle) return;
@@ -647,9 +648,10 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
           <p className="text-grey mb-4">Aucun véhicule sélectionné.</p>
           <button onClick={() => navigate('catalog-neuf')} className="bg-red text-white px-6 py-2.5 rounded font-bold text-sm bg-red-hover">Voir le catalogue</button>
         </div>
-      </main>
-    );
-  }
+</main>
+  </>
+  );
+};
 
   const similar = data.vehicles.filter(v => v.id !== vehicle.id && (v.body_type === vehicle.body_type || v.brand === vehicle.brand)).slice(0, 4);
   const equipment = Array.isArray(vehicle.equipment) ? vehicle.equipment : [];
@@ -674,9 +676,54 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
     { l: 'Disponibilité', v: vehicle.availability || 'Disponible', icon: Package },
   ].filter(s => s.v !== null && s.v !== undefined && s.v !== '');
 
-  return (
-    <main className="bg-grey-light min-h-screen pb-16">
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
+ return (
+  <>
+    {/* LIGHTBOX */}
+    {lightboxOpen && (
+      <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4" onClick={() => setLightboxOpen(false)}>
+        {/* Bouton fermer */}
+        <button onClick={() => setLightboxOpen(false)} className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center z-10">
+          <X size={24}/>
+        </button>
+
+        {/* Compteur photos */}
+        {allImages.length > 1 && (
+          <div className="absolute top-4 left-4 bg-white/10 text-white px-4 py-2 rounded-full text-sm font-bold">
+            {allImages.findIndex(img => img.url === mainImage) + 1} / {allImages.length}
+          </div>
+        )}
+
+        {/* Flèche gauche */}
+        {allImages.length > 1 && (
+          <button onClick={(e) => {
+            e.stopPropagation();
+            const currentIdx = allImages.findIndex(img => img.url === mainImage);
+            const prevIdx = (currentIdx - 1 + allImages.length) % allImages.length;
+            setMainImage(allImages[prevIdx].url);
+          }} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center z-10">
+            <ChevronLeft size={28}/>
+          </button>
+        )}
+
+        {/* Image agrandie */}
+        <img src={mainImage || vehicle.image} alt="" className="max-w-full max-h-[90vh] object-contain" onClick={(e) => e.stopPropagation()}/>
+
+        {/* Flèche droite */}
+        {allImages.length > 1 && (
+          <button onClick={(e) => {
+            e.stopPropagation();
+            const currentIdx = allImages.findIndex(img => img.url === mainImage);
+            const nextIdx = (currentIdx + 1) % allImages.length;
+            setMainImage(allImages[nextIdx].url);
+          }} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center z-10">
+            <ChevronRight size={28}/>
+          </button>
+        )}
+      </div>
+    )}
+
+  <main className="bg-grey-light min-h-screen pb-16">
+    <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
         <nav className="text-sm text-grey mb-4 flex items-center gap-2 flex-wrap">
           <button onClick={() => navigate('home')} className="hover:text-red">Accueil</button>
           <ChevronRight size={12}/>
@@ -689,7 +736,9 @@ const VehicleDetailPage = ({ vehicle, data, navigate, openVehicle }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
        <div className="lg:col-span-7">
   <div className="relative bg-grey-light">
-    <SafeImg src={mainImage || vehicle.image} alt="" className="aspect-[4/3]" fit="contain" />
+    <button onClick={() => setLightboxOpen(true)} className="block w-full cursor-zoom-in">
+  <SafeImg src={mainImage || vehicle.image} alt="" className="aspect-[4/3]" fit="contain" />
+    </button>
     <div className={`absolute top-4 left-4 px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded ${vehicle.type === 'neuf' ? 'bg-red text-white' : 'bg-dark text-white'}`}>
       {vehicle.type}
     </div>
